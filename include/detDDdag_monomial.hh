@@ -10,7 +10,7 @@
 #pragma once
 
 #include "adjointfield.hh"
-#include "flat-gauge_energy.hpp"
+#include "gauge_energy.hpp"
 #include "gaugeconfig.hh"
 #include "get_staples.hh"
 #include "hamiltonian_field.hh"

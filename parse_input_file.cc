@@ -201,7 +201,9 @@ namespace input_file_parsing {
       std::abort();
     }
 
-    mgparams.do_measure = true;
+    in.read_verb<bool>(mgparams.correlator, {"correlator"});
+    mgparams.do_measure =
+      mgparams.interpolator || mgparams.correlator; // true if we save one of the two
     in.read_verb<bool>(mgparams.doAPEsmear, {"do_APE_smearing"});
     if (mgparams.doAPEsmear) {
       in.read_sequence_verb<size_t>(mgparams.vec_nAPEsmear, {"APE_smearing", "n"});

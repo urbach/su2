@@ -1,0 +1,74 @@
+---
+title: Documentation `su2` project
+author: Simone Romiti
+output: 
+  html_document:
+    toc: true
+    theme: united
+bibliography: biblio.bib  
+csl: 2d-materials.csl
+link-citations: true
+---
+
+The present repository contains routines for numerical simulations of $SU(2)$ and $U(1)$ lattice gauge theories in $d=2,3,4$ dimensions.
+
+# Library routines
+
+The gauge configurations can be generated with the following Markov Chain Monte Carlo algorithms (see @gattringer2009quantum for the theoretical background):
+
+- Metropolis
+- Hybrid Monte Carlo
+
+The measurements can be generated either online (during the MCMC) or offline (on previously generated configurations). At present the supported observables are:
+
+- Plaquette standard and clover-improved energy
+- Glueball correlators
+- "pion" correlator
+- Wilson loops and static potential among $\bar{q} q$ pairs
+- Wilson gradient flow
+
+### Programs info
+
+- Programs: `main-u1.cpp` and `main-su2.cpp`
+- Parameters parsing: `yaml` input file
+- Input file example: see [./main.input](main.input)
+  Notes:
+  - Each run produces/updates a file named `nconf_counter.txt` in the directory storing the gauge configurations. This file contains a header line and the values below. An example:
+  ```
+  heat i path_conf
+  1 1140 ./confs/config_u1.4.4.1.16.b1.900000.1140
+  ```
+  - `restart` and `heat` cannot be passed simultaneously
+  - If `restart: true` is passed, the last configuration id and path are read from the `nconf_counter.txt` file.
+  - The program can do online and offline measurements
+
+##### `hadron` folder 
+
+In the `hadron/` folder are found scripts for data manipulation such that online measurements are more easily readable with the `R` library `hadron`: https://github.com/HISKP-LQCD/hadron:
+
+- `glueball.py`: converts the data for the interpolators and correlators of the glueball. 
+  1. This is done in a separate step and not directly in the `C++` code on purpose. One may want to generate configurations and do offline measurements afterwards in parallel (multiple jobs, one for each bunch of measurements).
+  2. The scripts takes care of deleting the files in the old format. For each choice of the parameters and interpolator type, only 4 files are saved in the corresponding folders:
+    
+      - `iconf.dat` : list of trajectory indices that have been put in `hadron` format
+      
+      - `pp.dat`, `pm.dat`, `mp.dat`, `mm.dat`: correlators
+    
+  3. The storage space saved in this way is mostly negligible, but avoids potential filesystem slowdowns due to the access to large number of files. Besides, the analysis scripts won't have to cope with reading the configurations one by one.
+  4. The script uses the same input file used for the runs
+
+### tests
+
+In the `test/` folder the user can find various simple programs implementing the routines of this repository. For further details please look at the `test/README.md` file.
+
+# How to use the library
+
+```{r child = './howto.Rmd'}
+```
+
+# Theoretical background
+
+Fermions are included as a degenerate doublet using the staggered discretization.
+
+```{r child = './staggered_fermions.Rmd'}
+```

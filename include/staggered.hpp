@@ -16,7 +16,7 @@
 #include <vector>
 
 #include "adjointfield.hh"
-#include "flat-gauge_energy.hpp"
+#include "gauge_energy.hpp"
 #include "gaugeconfig.hh"
 #include "geometry.hh"
 #include "get_staples.hh"

@@ -46,4 +46,4 @@ public:
                           const Float fac) const {}
 };
 
-#include "flat-gaugemonomial.hh"
+#include "gaugemonomial.hh"

@@ -12,7 +12,7 @@
 
 #pragma once
 #include "adjointfield.hh"
-#include "flat-gauge_energy.hpp"
+#include "gauge_energy.hpp"
 #include "gaugeconfig.hh"
 #include "geometry.hh"
 #include "get_staples.hh"
@@ -33,9 +33,9 @@ namespace flat_spacetime {
    * Returns:
    * (\beta/Nc)*\sum_{x} \sum_{\mu<\nu} \eta_{\mu \nu} Re(Tr(P_{\mu \nu}(x)))
    * with \eta_{0i}=1/\xi and \eta_{ij}=\xi
-   * 
+   *
    * where beta = 2*N_c/g_0^2
-   * 
+   *
    * @tparam Float
    * @tparam Group
    * @param U gauge configuration
@@ -59,7 +59,7 @@ namespace flat_spacetime {
    *
    * S_G = (\beta/Nc)*\sum_{x} \sum_{\mu<\nu}
    * \eta_{\mu \nu} Re(Tr(1 - P_{\mu\nu}(x)))
-   * 
+   *
    * where beta = 2*N_c/g_0^2
    *
    * @tparam Float
@@ -102,6 +102,16 @@ namespace flat_spacetime {
         flat_spacetime::get_S_G_hmc<Float, Group>(*h.U, (*this).xi, (*this).anisotropic);
       return;
     }
+
+    /**
+     * @brief updating the derivative of the action with respect to the gauge field
+     * contribution in this monomial
+     *
+     * @param deriv derivative to be updated
+     * @param h hamiltonian field (Hybrid Monte Carlo evolution)
+     * @param fac multiplicative facator of the derivative (1.0 for the HMC but != 1 in
+     * other cases e.g. the gradient flow evolution)
+     */
     void derivative(adjointfield<Float, Group> &deriv,
                     hamiltonian_field<Float, Group> const &h,
                     const Float fac = 1.) const override {
@@ -115,13 +125,10 @@ namespace flat_spacetime {
               for (size_t mu = 0; mu < h.U->getndims(); mu++) {
                 accum S;
                 get_staples(S, *h.U, x, mu, (*this).xi, (*this).anisotropic);
-                S = (*h.U)(x, mu) * S;
-                // the antihermitian traceless part
-                // beta/N_c *(U*U^stap - (U*U^stap)^dagger)
-                // in get_deriv
+                S = (*h.U)(x, mu) * S; // U*A in eq. 8.40 in Gattringer&Lang
 
-                deriv(x, mu) +=
-                  fac * h.U->getBeta() / double(h.U->getNc()) * get_deriv<double>(S);
+                const double num_fact_i = fac * h.U->getBeta() / double(h.U->getNc());
+                deriv(x, mu) += num_fact_i * get_deriv<double>(S);
               }
             }
           }

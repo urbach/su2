@@ -1,7 +1,7 @@
 #include"su2.hh"
 #include"u1.hh"
 #include"gaugeconfig.hh"
-#include"flat-gauge_energy.hpp"
+#include"gauge_energy.hh"
 #include"random_gauge_trafo.hh"
 #include"flat-sweep.hh"
 #include"parse_commandline.hh"

@@ -54,7 +54,7 @@ namespace global_parameters {
 
     // glueball interpolators are all loops of links of a certain size and shape
     bool interpolator = false; // true if measuring the glueball interpolators
-    std::string interpolator_type = "NONE"; // "squares", "rectangles", "fatL", etc.
+    std::string interpolator_type = "NONE"; // "rectangles" or "fatL"
     bool save_interpolator = false; // true if saving interpolators values
     bool spatial_loops = true; // true if using only spatial loops
     size_t rmin = 0, rmax = 0; // minum and maximum sizes of the interpolating loops

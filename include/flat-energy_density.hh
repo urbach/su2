@@ -80,39 +80,39 @@ namespace flat_spacetime {
             accum G[4][4];
             for (size_t mu = mu_start; mu < U.getndims() - 1; mu++) {
               for (size_t nu = mu + 1; nu < U.getndims(); nu++) {
-                x1[mu] += 1;
-                x2[nu] += 1;
+                x1[mu] += 1; // x + mu
+                x2[nu] += 1; // x + nu
                 accum leaf =
                   U(x, mu) * U(x1, nu) * U(x2, mu).dagger() * U(x, nu).dagger();
-                x1[mu] -= 1;
-                x2[nu] -= 1;
+                x1[mu] -= 1; // x
+                x2[nu] -= 1; // x
 
                 if (cloverdef) {
-                  x1[mu] -= 1;
-                  x1[nu] += 1;
-                  x2[mu] -= 1;
+                  x1[mu] -= 1; // x - mu
+                  x1[nu] += 1; // x - mu + nu
+                  x2[mu] -= 1; // x - mu
                   leaf += U(x, nu) * U(x1, mu).dagger() * U(x2, nu).dagger() * U(x2, mu);
-                  x1[mu] += 1;
-                  x1[nu] -= 1;
-                  x2[mu] += 1;
+                  x1[mu] += 1; // x + nu
+                  x1[nu] -= 1; // x
+                  x2[mu] += 1; // x
 
-                  x1[mu] -= 1;
-                  x2[mu] -= 1;
-                  x2[nu] -= 1;
-                  x3[nu] -= 1;
+                  x1[mu] -= 1; // x - mu
+                  x2[mu] -= 1; // x - mu
+                  x2[nu] -= 1; // x - mu -nu
+                  x3[nu] -= 1; // x - nu
                   leaf += U(x1, mu).dagger() * U(x2, nu).dagger() * U(x2, mu) * U(x3, nu);
-                  x1[mu] += 1;
-                  x2[mu] += 1;
-                  x2[nu] += 1;
-                  x3[nu] += 1;
+                  x1[mu] += 1; // x
+                  x2[mu] += 1; // x + nu
+                  x2[nu] += 1; // x
+                  x3[nu] += 1; // x
 
-                  x1[nu] -= 1;
-                  x2[nu] -= 1;
-                  x2[mu] += 1;
+                  x1[nu] -= 1; // x - nu
+                  x2[nu] -= 1; // x - nu
+                  x2[mu] += 1; // x + mu -nu
                   leaf += U(x1, nu).dagger() * U(x1, mu) * U(x2, nu) * U(x, mu).dagger();
-                  x1[nu] += 1;
-                  x2[nu] += 1;
-                  x2[mu] -= 1;
+                  x1[nu] += 1; // x
+                  x2[nu] += 1; // x + mu
+                  x2[mu] -= 1; // x
                 }
                 // traceless and anti-hermitian
                 // here we include a factor 1/2 already

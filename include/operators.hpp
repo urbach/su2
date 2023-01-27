@@ -12,7 +12,7 @@
 #include <sstream>
 #include <vector>
 
-#include "flat-gradient_flow.hh"
+#include "gradient_flow.hh"
 #include "gaugeconfig.hh"
 #include "links.hpp"
 #include "parameters.hh"

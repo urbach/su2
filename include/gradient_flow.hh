@@ -1,10 +1,10 @@
 #pragma once
-//#include"gradient_flow.hh"
+// #include"gradient_flow.hh"
 #include "adjointfield.hh"
 #include "flat-energy_density.hh"
-#include "flat-gauge_energy.hpp"
-#include "flat-gaugemonomial.hh"
+#include "gauge_energy.hpp"
 #include "gaugeconfig.hh"
+#include "gaugemonomial.hh"
 #include "hamiltonian_field.hh"
 #include "monomial.hh"
 #include "su2.hh"
@@ -32,17 +32,13 @@ void runge_kutta(hamiltonian_field<Float, Group> &h,
   // before the three steps zero the derivative field
   zeroadjointfield(*(h.momenta));
 
+  const double fact_f = 2.0 * h.Fact_Nc_force_Luscher * h.U->getNc() / h.U->getBeta();
   for (int f = 0; f < 3; f++) {
-    // add to *(h.momenta)
+    // evolution of eq. C.2 of https://arxiv.org/pdf/1006.4518.pdf
     // we have to cancel beta/N_c from the derivative
-    // a factor two to obtain the correct normalisation of
-    // the Wilson plaquette action
-    // S_W = 1./g_0^2 \sum_x \sum_{p} Re Tr(1 - U(p))
-    // where we sum over all oriented plaquettes
-    // we sum over unoriented plaquettes, so we have to multiply by 2
-    // which is usually in beta
-    SW.derivative(*(h.momenta), h, 2. * h.U->getNc() * zfac[f] / h.U->getBeta());
-    // The '-' comes from the action to be tr(1-U(p))
+
+    // updating the momenta *(h.momenta)
+    SW.derivative(*(h.momenta), h, fact_f * zfac[f]);
     // update the flowed gauge field Vt
     update_gauge(h, -eps * expfac[f]);
   }

@@ -51,7 +51,6 @@ configure_file(
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -D_USE_OMP_")
   
   find_package(yaml-cpp)
-  
   include_directories(${YAML_CPP_INCLUDE_DIR} ${YAML_CPP_INCLUDE_DIR}/yaml-cpp/)
 
   find_package(xtl)
@@ -60,6 +59,11 @@ configure_file(
   find_package(xtensor)
   include_directories(${xtensor_INCLUDE_DIRS} ${xtensor_INCLUDE_DIRS}/xtensor/)
 
+
+  if(${HIGHFIVE_FORMAT})
+    find_package(HighFive REQUIRED)
+  endif()
+  
 # We could just have two `add_executable` blocks listing almost all source
 # files. However, CMake would then compile the source files twice, once for
 # each executable. The rationale is that different flags can be used for
@@ -90,9 +94,31 @@ add_executable(test-groups test.cc)
 add_executable(scaling scaling.cc)
 add_executable(try tryreduce.cc)
 
+set(test_progs "links" "smearing" "yaml")
+
+if(${HIGHFIVE_FORMAT})
+  set(test_progs ${test_progs} "h5-gen" "h5-dump")
+endif()
+
+set(test_progs_fullname "")
+foreach(target ${test_progs})
+  add_executable(test-${target}.exe test/${target}.cpp)
+  list(APPEND test_progs_fullname test-${target}.exe) # now FOO="a;b"
+endforeach(target)
+
+
+target_link_libraries(test-yaml.exe ${YAML_CPP_LIBRARIES})
+
+foreach(target ${test_progs_fullname})
+  if(${HIGHFIVE_FORMAT})
+    target_link_libraries(${target} HighFive)
+  endif()
+endforeach(target)
+
+
 target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC ${YAML_CPP_LIBRARY_DIR})
 
-foreach(target u1-main su2-main su2-kramers test-groups scaling try)
+foreach(target u1-main su2-main su2-kramers test-groups scaling try ${test_progs_fullname})
   target_link_libraries(${target} su2 ${YAML_CPP_LIBRARIES})
 
   if(Boost_FOUND)
@@ -110,4 +136,9 @@ install(TARGETS ${PROJECT_NAME}
 install(TARGETS u1-main su2-main)
 install(TARGETS su2-kramers test-groups scaling try)
 
+# tests
+
+foreach(target ${test_progs})
+  install(TARGETS test-${target}.exe LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endforeach(target)
 

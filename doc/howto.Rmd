@@ -1,27 +1,6 @@
 ---
-title: u1
-author: Simone Romiti
 output: html_document
-bibliography: biblio.bib  
-csl: 2d-materials.csl
-link-citations: true
 ---
-
-## Introduction and main features
-
-This repository contains a program called `main-u1.cpp`, which is capable of both generating gauge configurations and doing measurements on them for a $U(1)$ theory in $d=2,3,4$ dimensions.
-At present the gauge configurations can be generated with the following Markov Chain Monte Carlo algorithms (see @gattringer2009quantum for the theoretical background):
-
-- Metropolis
-- Hybrid Monte Carlo
-
-The measurements can be generated either online (during the MCMC) or offline (on previously generated configurations). At present the supported observables are:
-
-- Plaquette standard and clover-improved energy
-- Glueball correlators
-- "pion" correlator
-- Wilson loops and static potential among $\bar{q} q$ pairs
-- Wilson gradient flow
 
 ## Program execution
 
@@ -102,6 +81,3 @@ WRITE DOCUMENTATION HERE
 - `potential` block. 
 - `glueball` block. The user can specify the interpolators and the APE smearing parameters      
 - `gradient_flow` block
-
-## References
-

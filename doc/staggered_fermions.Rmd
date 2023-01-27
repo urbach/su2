@@ -1,11 +1,13 @@
 ---
-title: Staggered fermions
-author: Simone Romiti
+#title: Staggered fermions
+#author: Simone Romiti
 output: html_document
-bibliography: biblio.bib  
-csl: 2d-materials.csl
-link-citations: true
+#bibliography: biblio.bib  
+#csl: 2d-materials.csl
+#link-citations: true
 ---
+
+## Staggered fermions
 
 For staggered fermions the Dirac operator is:
 

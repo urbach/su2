@@ -10,7 +10,7 @@
  *
  */
 
-#include "flat-gauge_energy.hpp"
+#include "gauge_energy.hh"
 #include "gaugeconfig.hh"
 #include "geometry.hh"
 #include "integrator.hh"

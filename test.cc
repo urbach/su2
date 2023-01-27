@@ -2,7 +2,7 @@
 #include"u1.hh"
 #include"random_element.hh"
 #include"gaugeconfig.hh"
-#include"flat-gauge_energy.hpp"
+#include"gauge_energy.hpp"
 #include"random_gauge_trafo.hh"
 #include"parse_commandline.hh"
 #include"flat-energy_density.hh"
